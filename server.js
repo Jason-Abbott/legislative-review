@@ -14,7 +14,6 @@ L.app.use(require('./lib/middleware/json-response'));
 L.app.use(express.static(__dirname + '/dist'));
 L.app.use((req, res) => { res.sendFile('app.html', root) });
 
-// initialize routes
-//require('./lib/sections/api-routes');
 console.info("Starting Legislative Review service in %s mode on port %s", mode, port);
+
 L.app.listen(port);

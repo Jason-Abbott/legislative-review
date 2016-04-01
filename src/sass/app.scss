@@ -7,12 +7,19 @@
 body {
 	padding: 0;
 	margin: 0;
-	//background-image: url('./img/topo-tile-light.jpg');
 	font-family: $bodyFont;
 }
 
 div.view {
 	padding: $space;
+}
+
+div.hero {
+	background-image: url(./img/pinyon-peak.jpg);
+	background-repeat: no-repeat;
+	background-size: 100% auto;
+	width: 100%;
+	height: 600px;
 }
 
 div.modal {
@@ -22,12 +29,18 @@ div.modal {
 	margin: 0 auto;
 }
 
+header.main, footer.main {
+	color: $backgroundColor;
+	background-color: $darkColor;
+}
+
+header.main {
+}
+
 footer.main {
 	position: absolute;
-	color: $backgroundColor;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	height: 200px;
-	background-color: $darkColor;
+	height: 80px;
 }

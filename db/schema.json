@@ -18,6 +18,14 @@
 		"updated": null
 	}],
 
+	"post": [{
+		"id": null,
+		"author": null,
+		"slug": null,
+		"title": null,
+		"html": null
+	}],
+
 	"comment": [{
 		"billID": 1,
 		"userID": 0,
@@ -33,6 +41,9 @@
 	"user": [{
 		"id": 0,
 		"token": "",
-		"type": ""
+		"type": "",
+		"comments": [],
+		"posts": [],
+		"ratings": []
 	}]
 }
