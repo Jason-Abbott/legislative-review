@@ -6,7 +6,7 @@ const L = require('./lib');
 const express = require('express');
 const mode = process.env['NODE_ENV'];
 const path = require('path');
-const port = process.env['PORT'] | 3000;
+const port = process.env['PORT'] || 3000;
 const root = { root: path.join(__dirname, './dist') };
 
 L.app = express();
