@@ -1,0 +1,55 @@
+{
+  "name": "legislative-review",
+  "description": "Legislative Review",
+  "version": "1.0.0",
+  "private": true,
+  "author": {
+    "name": "Jason Abbott"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "scripts": {
+    "build:font": "webfont-dl \"http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,100|Roboto+Condensed:400,700\" --css-rel=./fonts -o dist/fonts/webfont.css",
+    "build:js": "browserify ./lib/app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/app.js",
+    "build:css": "node_modules/.bin/node-sass ./src/sass/app.scss ./dist/app.css && cat ./dist/app.css ./dist/fonts/webfont.css | node_modules/.bin/cleancss -o ./dist/app.css",
+    "build": "npm run build:css && npm run build:js",
+    "test": "node_modules/.bin/mocha --reporter spec",
+    "watch": "parallelshell \"npm run watch:css -s\" \"npm run watch:js -s\"",
+    "watch:css": "nodemon -e scss --watch src/sass --exec 'npm run build:css'",
+    "watch:js": "nodemon -e js,json,jsx --watch lib --exec 'npm run build:js'",
+    "flushdns:osx": "dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+  },
+  "dependencies": {
+    "body-parser": "^1.10",
+    "compression": "^1.6.0",
+    "dotenv": "^2.0.0",
+    "express": "^4.0",
+    "lodash": "^4.5.0"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.0.0",
+    "browserify": "^13.0.0",
+    "chai": "^3.4.1",
+    "minifyify": "^7.3.1",
+    "mocha": "^2.3.4",
+    "node-sass": "^3.4.2",
+    "nodemon": "^1.9.0",
+    "parallelshell": "^2.0.0",
+    "react": "0.14.7",
+    "react-addons-test-utils": "^0.14.8",
+    "react-dom": "0.14.8",
+    "superagent": "^1.7.2",
+    "webfont-dl": "^0.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "main": "index",
+  "bugs": {
+    "url": ""
+  }
+}

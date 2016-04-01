@@ -1,0 +1,29 @@
+@import 'mixins';
+
+div.notification-menu {
+	position: relative;
+	margin-top: 18px;
+	margin-left: 18px;
+	width: 40px;
+	text-align: center;
+
+	@include keyframes(more-bell) {
+		from { font-size: 24px; }
+		to { font-size: 40px; }
+	}
+
+	.fa {
+		font-size: 24px;
+		line-height: 40px;
+		color: red;
+		cursor: pointer;
+		@include transition(font-size .2s ease);
+
+		&:hover {
+			animation-name: more-bell;
+			animation-duration: 0.2s;
+			animation-iteration-count: 1;
+			font-size: 40px;
+		}
+	}
+}

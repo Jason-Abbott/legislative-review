@@ -1,0 +1,30 @@
+$navColor: #474;
+$backgroundColor: #fff;
+$trimColor: #5cb85c;
+$darkColor: #0f2105;
+$space: 10px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+// fonts are downloaded and inlined with webfont-dl
+// see README.md for more details
+$bodyFont: 'Roboto', Arial;
+$narrowFont: 'Roboto Condensed', Arial Narrow;
+
+@mixin phone {
+	@media (max-width: #{$tablet-width - 1px}) {
+		@content;
+	}
+}
+
+@mixin tablet {
+	@media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (min-width: #{$desktop-width}) {
+		@content;
+	}
+}
