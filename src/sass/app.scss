@@ -1,5 +1,4 @@
 @import "config";
-@import "team";
 @import "menu";
 @import "alert";
 @import "mixins";
@@ -8,7 +7,7 @@
 body {
 	padding: 0;
 	margin: 0;
-	background-image: url('./img/topo-tile-light.jpg');
+	//background-image: url('./img/topo-tile-light.jpg');
 	font-family: $bodyFont;
 }
 
@@ -21,27 +20,6 @@ div.modal {
 	top: $space * 5;
 	width: 200px;
 	margin: 0 auto;
-}
-
-nav.top-nav {
-	width: 100%;
-	height: 75px;
-	border-bottom: 3px solid $trimColor;
-	background: $backgroundColor;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-content: center;
-
-	a.logo {
-		display: block;
-		margin-top: 6px;
-		margin-right: 15px;
-		width: 165px;
-		height: 50px;
-		background: url('./img/gaialogo-green.png') no-repeat;
-		background-size: 165px 50px;
-	}
 }
 
 footer.main {

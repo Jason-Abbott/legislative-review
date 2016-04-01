@@ -1,0 +1,38 @@
+{
+	"region": [{
+		"id": 1,
+		"name": "Idaho"
+	}],
+
+	"session": [{
+		"regionID": 1,
+		"name": "2015"
+	}],
+
+	"bill": [{
+		"id": 1,
+		"sessionID": 1,
+		"text": "",
+		"status": null,
+		"created": null,
+		"updated": null
+	}],
+
+	"comment": [{
+		"billID": 1,
+		"userID": 0,
+		"replyToID": 0
+	}],
+
+	"rating": [{
+		"billID": 1,
+		"userID": 0,
+		"value": 0
+	}],
+
+	"user": [{
+		"id": 0,
+		"token": "",
+		"type": ""
+	}]
+}
