@@ -10,33 +10,40 @@
     "node": ">=5.0.0"
   },
   "scripts": {
+    "public:build:js": "browserify ./lib/app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/public.js",
+    "public:build:css": "node_modules/.bin/node-sass ./src/sass/public.scss ./dist/public.css && cat ./dist/public.css ./dist/fonts/webfont.css | node_modules/.bin/cleancss -o ./dist/public.css",
+    "public:build": "npm run public:build:css && npm run public:build:js",
+    "public:watch": "parallelshell \"npm run watch:css -s\" \"npm run public:watch:js -s\"",
+    "public:watch:css": "nodemon -e scss --watch src/sass --exec 'npm run public:build:css'",
+    "public:watch:js": "nodemon -e js,json,jsx --watch lib --exec 'npm run public:build:js'",
+    "test": "node_modules/.bin/mocha",
     "build:font": "webfont-dl \"http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,100|Roboto+Condensed:400,700\" --css-rel=./fonts -o dist/fonts/webfont.css",
-    "build:js": "browserify ./lib/app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/app.js",
-    "build:css": "node_modules/.bin/node-sass ./src/sass/app.scss ./dist/app.css && cat ./dist/app.css ./dist/fonts/webfont.css | node_modules/.bin/cleancss -o ./dist/app.css",
-    "build": "npm run build:css && npm run build:js",
-    "test": "node_modules/.bin/mocha --reporter spec",
-    "watch": "parallelshell \"npm run watch:css -s\" \"npm run watch:js -s\"",
-    "watch:css": "nodemon -e scss --watch src/sass --exec 'npm run build:css'",
-    "watch:js": "nodemon -e js,json,jsx --watch lib --exec 'npm run build:js'",
-    "flushdns:osx": "dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+    "flushdns:osx": "dscacheutil -flushcache; sudo killall -HUP mDNSResponder",
+    "admin:build:js": "browserify ./lib/admin.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/admin.js",
+    "admin:build:css": "node_modules/.bin/node-sass ./src/sass/admin.scss ./dist/admin.css && cat ./dist/admin.css ./dist/fonts/webfont.css | node_modules/.bin/cleancss -o ./dist/admin.css",
+    "admin:build": "npm run build:css && npm run build:js",
+    "admin:watch": "parallelshell \"npm run admin:watch:css -s\" \"npm run admin:watch:js -s\"",
+    "admin:watch:css": "nodemon -e scss --watch src/sass --exec 'npm run admin:build:css'",
+    "admin:watch:js": "nodemon -e js,json,jsx --watch lib --exec 'npm run admin:build:js'"
   },
   "dependencies": {
     "body-parser": "^1.10",
     "compression": "^1.6.0",
-    "express": "^4.0",
-    "firebase": "^2.4.2",
-    "lodash": "^4.5.0"
+    "express": "^4.0"
   },
   "devDependencies": {
+    "babel-core": "^6.7.4",
+    "babel-plugin-transform-react-jsx": "^6.7.4",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
     "babelify": "^7.0.0",
     "browserify": "^13.0.0",
     "chai": "^3.4.1",
     "clean-css": "^3.4.10",
+    "firebase": "^2.4.2",
+    "jsdom": "^8.2.0",
     "minifyify": "^7.3.1",
     "mocha": "^2.3.4",
-    "node-sass": "^3.4.2",
     "nodemon": "^1.9.0",
     "parallelshell": "^2.0.0",
     "react": "0.14.8",
@@ -47,10 +54,10 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Jason-Abbott/legislative-review"
   },
   "main": "index",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/Jason-Abbott/legislative-review/issues"
   }
 }

@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Jason-Abbott/legislative-review.svg?branch=master)](https://travis-ci.org/Jason-Abbott/legislative-review)
+[![David](https://david-dm.org/Jason-Abbott/legislative-review.svg)](https://david-dm.org/Jason-Abbott/legislative-review)
+
 # Setup
 
 1. Install current node.js
