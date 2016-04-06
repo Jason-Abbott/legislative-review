@@ -85,7 +85,7 @@ const cache = {
 		let url = req.url.replace(/^\//, '');
 		if (url === '') { url = home.public; }
 		let item = this.items[url];
-		if (item === null) { item = this.items[home.public]; }
+		if (item === undefined) { item = this.items[home.public]; }
 		let headers = {
 			'Cache-Control': 'max-age=86400, public',
 			'ETag': item.eTag,
