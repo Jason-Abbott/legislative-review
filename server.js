@@ -6,10 +6,13 @@ const compress = require('zlib');
 const path = require('path');
 const root = path.join(__dirname, './dist/');
 const now = (new Date()).getTime();
+const home = { public: 'public.html', admin: 'admin.html' };
+// white-list allowed files and folders
 const allow = {
 	folders: /^(fonts|img|partials)$/,
-	files: /(html|css|js|svg|ttf|woff|woff2|otf)$/i
+	files: /(html|css|js|jpg|png|ico|gif|svg|ttf|woff|woff2|otf)$/i
 };
+// extensions of files that will be gzipped
 const zippable = /(html|css|js|svg|ttf|otf)$/;
 const mimeTypes = {
 	js: 'application/javascript',
@@ -25,115 +28,89 @@ const mimeTypes = {
 const cache = {
 	items: {},
 	pending: 0,
-	onComplete: null,
-	
-	add(name, buffer) {
+	loaded: null,
+
+	// add buffer to cache
+	add(name, buffer, compressed) {
 		let parts = name.split('.');
 		this.items[name] = {
 			mimeType: mimeTypes[parts[parts.length - 1]],
 			buffer: buffer,
-			eTag: now
+			compressed: compressed,
+			eTag: name + now
 		};
+		this.next();
 	},
 
+	// load file and optionally compress for cache
 	addFile(name) {
-		let content = fs.readFileSync(root + name);
-		if (content !== null) {
-			if (zippable.test(name)) {
-				compress.gzip(content, (err, buffer) => {
-					if (err === null) { this.add(name, buffer); }
-					this.commit();
-				});
+		fs.readFile(root + name, (err, content) => {
+			if (err === null && content !== null) {
+				if (zippable.test(name)) {
+					compress.gzip(content, (err, buffer) => {
+						this.add(name, buffer, true);
+					});
+				} else {
+					this.add(name, content, false);
+				}
 			} else {
-				this.add(name, content);
-				this.commit();
+				this.next();
 			}
-		} else {
-			this.commit();
-		}
+		});
 	},
-	
-	addFolder(path) {
-		path = ((path === undefined) ? '' : path + '/');
-		let files = fs.readdirSync(root + path);
-		this.pending += files.length;
-		files.forEach(f => {
-			if (allow.folders.test(f)) {
-				this.addFolder(path + f);
-			} else if (allow.files.test(f)) {
-				this.addFile(path + f)
-			} else {
-				this.commit();
-			}
+
+	// load folder of files to cache
+	load(fnOrPath) {
+		let path = '';
+		if (typeof fnOrPath == 'function') {
+			this.loaded = fnOrPath;
+		} else {
+			path = fnOrPath + '/';
+		}
+		fs.readdir(root + path, (err, files) => {
+			files.forEach(f => {
+				if (allow.folders.test(f)) {
+					this.load(path + f);
+				} else if (allow.files.test(f)) {
+					this.pending++;
+					this.addFile(path + f)
+				}
+			});
 		});
 		return this;
 	},
 
+	// send cached file
 	send(req, res) {
-		let item = this.items[req.url];
-		res.writeHead('Content-Encoding', 'gzip');
-		res.writeHead('Cache-Control', 'max-age=86400, public');    // seconds
-		res.writeHead('ETag', item.eTag);
-	 	res.writeHead('Content-Type', item.mimeType + ';charset=utf-8');
+		let url = req.url.replace(/^\//, '');
+		if (url === '') { url = home.public; }
+		let item = this.items[url];
+		if (item === null) { item = this.items[home.public]; }
+		let headers = {
+			'Cache-Control': 'max-age=86400, public',
+			'ETag': item.eTag,
+			'Content-Type': item.mimeType + ';charset=utf-8'
+		};
+		if (item.compressed) { headers['Content-Encoding'] = 'gzip'; }
+		
+		res.writeHead(200, headers);
 		res.write(item.buffer);
 		res.end();
 	},
 
-	commit() {
-		if (--this.pending == 0 && this.onComplete !== null) { this.onComplete(); }
-		else { console.log(this.pending); }
-	},
-
-	then(fn) { this.onComplete = fn; }
+	next() {
+		if (--this.pending == 0 && this.loaded !== null) {
+			this.items['admin'] = this.items[home.admin];
+			this.loaded();
+		}
+	}
 };
 
-cache.addFolder().then(() => {
+cache.load(() => {
 	const http = require('http');
 	const port = process.env['PORT'] || 3000;
 
-	http.createServer(cache.send).listen(port, ()=> {
+	http.createServer(cache.send.bind(cache)).listen(port, ()=> {
 		console.info("Starting Legislative Review on port %s", port)
 	});
 });
-
-// res.sendCompressed = (mimeType, item, cache) => {
-// 	if (cache === undefined) { cache = true; }
-//
-// 	res.setHeader('Content-Encoding', 'gzip');
-//
-// 	if (cache) {
-// 		res.setHeader('Cache-Control', 'max-age=86400, public');    // seconds
-// 	} else {
-// 		// force no caching
-// 		res.setHeader('Cache-Control', 'no-cache');
-// 		res.setHeader('expires', 'Tue, 01 Jan 1980 1:00:00 GMT');
-// 		res.setHeader('pragma', 'no-cache');
-// 	}
-// 	res.setHeader('ETag', item.eTag);
-// 	res.setHeader('Content-Type', mimeType + ';charset=utf-8');
-// 	res.write(item.buffer);
-// 	res.end();
-// };
-//
-// // res.setHeader('Content-Type', 'application/json');
-// // res.send(JSON.stringify(o));
-//
-// function cacheAndSend(res, text, slug, mimeType) {
-// 	compress.gzip(text, (err, buffer) => {
-// 		let ci = new CacheItem(slug, buffer);
-// 		if (config.cacheOutput) { db.cache.addOutput(key, slug, buffer); }
-// 		res.sendCompressed(mimeType, ci, slug);
-// 	});
-// }
-
-//
-//
-//
-// L.app = express();
-// L.app.use(require('./lib/middleware/json-response'));
-// L.app.use(express.static(__dirname + '/dist'));
-// L.app.use((req, res) => { res.sendFile('public.html', root) });
-//
-// console.info("Starting Legislative Review service in %s mode on port %s", mode, port);
-//
-// L.app.listen(port);
