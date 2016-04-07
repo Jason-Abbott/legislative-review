@@ -109,8 +109,12 @@ const cache = {
 cache.load(() => {
 	const http = require('http');
 	const port = process.env['PORT'] || 3000;
+	const tasks = require('./lib/tasks');
+	
+	tasks.start();
 
 	http.createServer(cache.send.bind(cache)).listen(port, ()=> {
-		console.info("Starting Legislative Review on port %s", port)
+		console.info("Starting Legislative Review on port %s", port);
+		
 	});
 });

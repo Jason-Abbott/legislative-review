@@ -10,7 +10,7 @@
     "node": ">=5.0.0"
   },
   "scripts": {
-    "public:build:js": "browserify ./lib/app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/public.js",
+    "public:build:js": "browserify ./lib/public-app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/public.js",
     "public:build:css": "node_modules/.bin/node-sass ./src/sass/public.scss ./dist/public.css && cat ./dist/public.css ./dist/fonts/webfont.css | node_modules/.bin/cleancss -o ./dist/public.css",
     "public:build": "npm run public:build:css && npm run public:build:js",
     "public:watch": "parallelshell \"npm run watch:css -s\" \"npm run public:watch:js -s\"",
@@ -19,7 +19,7 @@
     "test": "node_modules/.bin/mocha",
     "build:font": "webfont-dl \"http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,100|Roboto+Condensed:400,700\" --css-rel=./fonts -o dist/fonts/webfont.css",
     "flushdns:osx": "dscacheutil -flushcache; sudo killall -HUP mDNSResponder",
-    "admin:build:js": "browserify ./lib/admin.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/admin.js",
+    "admin:build:js": "browserify ./lib/admin-app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/admin.js",
     "admin:build:css": "node_modules/.bin/node-sass ./src/sass/admin.scss ./dist/admin.css && cat ./dist/admin.css ./dist/fonts/webfont.css | node_modules/.bin/cleancss -o ./dist/admin.css",
     "admin:build": "npm run build:css && npm run build:js",
     "admin:watch": "parallelshell \"npm run admin:watch:css -s\" \"npm run admin:watch:js -s\"",
@@ -27,9 +27,9 @@
     "admin:watch:js": "nodemon -e js,json,jsx --watch lib --exec 'npm run admin:build:js'"
   },
   "dependencies": {
-    "body-parser": "^1.10",
-    "compression": "^1.6.0",
-    "firebase": "^2.4.2"
+    "cheerio": "^0.20.0",
+    "firebase": "^2.4.2",
+    "superagent": "^1.7.2"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
@@ -48,7 +48,6 @@
     "react": "^15.0.0-rc.2",
     "react-addons-test-utils": "^15.0.0-rc.2",
     "react-dom": "^15.0.0-rc.2",
-    "superagent": "^1.7.2",
     "webfont-dl": "^0.1.2"
   },
   "repository": {
