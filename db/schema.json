@@ -1,22 +1,59 @@
 {
-	"region": [{
-		"id": 1,
-		"name": "Idaho"
-	}],
+	"<region>": {
+		"bill": {
+			"<year>": {
+				"<id>": {
+					"title": null,
+					"summary": null,
+					"text": {
+						"<page number>": {
+							"<line number>": null
+						}
+					},
+					"links": {
+						"text": null,
+						"purpose": null
+					},
+					"votes": {
+						"yes": ["<member uid>"],
+						"no": ["<member uid>"],
+						"absent": ["<member uid>"]
+					}
+				}
+			}
+		},
+		"member": {
+			"<uid>": {
+				"id": 0,
+				"image": null,
+				"name": null,
+				"district": 0,
+				"chamber": "house",
+				"party": "R",
+				"votes": {
+					"yes": ["<bill year/id>"],
+					"no": ["<bill year/id>"],
+					"absent": ["<bill year/id>"]
+				},
+				"active": true
+			}
+		},
 
-	"session": [{
-		"regionID": 1,
-		"name": "2015"
-	}],
-
-	"bill": [{
-		"id": 1,
-		"sessionID": 1,
-		"text": "",
-		"status": null,
-		"created": null,
-		"updated": null
-	}],
+		"rubric": {
+			"<uid>": {
+				"question": null,
+				"description": null,
+				"points": 0
+			}
+		}
+	},
+	"user": {
+		"<uid>": {
+			"token": null,
+			"name": null,
+			"role": "(admin|analyst)"
+		}
+	}
 
 	"post": [{
 		"id": null,
@@ -36,14 +73,5 @@
 		"billID": 1,
 		"userID": 0,
 		"value": 0
-	}],
-
-	"user": [{
-		"id": 0,
-		"token": "",
-		"type": "",
-		"comments": [],
-		"posts": [],
-		"ratings": []
 	}]
 }
