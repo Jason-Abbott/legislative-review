@@ -12,12 +12,16 @@ const options = {
 
 // borrowed from https://github.com/babel/babel-jest/blob/master/index.js
 require.extensions['.js'] = function(module, filename) {
-	if (filename.indexOf('node_modules') === -1) {
+	if (notIn(filename, ['node_modules','tasks'])) {
 		let compiled = babel.transformFileSync(filename, options).code;
 		module._compile(compiled, filename);
 		return module;
 	} else {
-		let x = original(module, filename);
-		return x;
+		let m = original(module, filename);
+		return m;
 	}
 };
+
+function notIn(filename, folders) {
+	return folders.find(f => filename.indexOf('/' + f + '/') >= 0) === undefined;
+}
