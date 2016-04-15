@@ -1,0 +1,46 @@
+// https://github.com/modesty/pdf2json
+
+$font0: 'QuickType', Arial, Helvetica, sans-serif;
+$font1: 'QuickType Condensed', 'Arial Narrow', Arial, Helvetica, sans-serif;
+$font2: 'QuickType Pi';
+$font3: 'QuickType Mono', 'Courier New', Courier, monospace;
+$font4: OCR-A, 'Courier New', Courier, monospace;
+$font5: 'OCR B MT', 'Courier New', Courier, monospace;
+
+.pdf00, .pdf01, .pdf02, .pdf03, .pdf04, .pdf05, .pdf06, .pdf07, .pdf08, .pdf09,
+.pdf10, .pdf11, .pdf12, .pdf13, .pdf14, .pdf15, .pdf16, .pdf17, .pdf18, .pdf19,
+.pdf20, .pdf21, .pdf22, .pdf23, .pdf51, .pdf52, .pdf53, .pdf54 {
+	font-family: $font0;
+}
+
+.pdf24, .pdf25, .pdf26, .pdf27, .pdf28, .pdf29, .pdf30, .pdf31, .pdf32, .pdf33,
+.pdf34, .pdf35, .pdf36, .pdf37, .pdf38, .pdf39, .pdf40, .pdf41, .pdf55, .pdf56,
+.pdf57 {
+	font-family: $font1;
+}
+
+.pdf42, .pdf43, .pdf44, .pdf45, .pdf46 {
+	font-family: $font2;
+}
+
+.pdf47, .pdf48, .pdf49 {
+	font-family: $font3;
+}
+
+.pdf50, .pdf58 {
+	font-family: $font4;
+}
+
+.pdf59. .pdf60 {
+	font-family: $font5;
+}
+
+.pdf00, .pdf06, .pdf18 {
+	font-size: 6pt;
+}
+
+.pdf01, .pdf07, .pdf19 {
+	font-size: 8pt;
+}
+
+// not done
