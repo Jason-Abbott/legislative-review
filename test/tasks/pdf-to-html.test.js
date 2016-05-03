@@ -30,12 +30,17 @@ describe('PDF to HTML converter', ()=> {
 		});
 
 		fs.readFile(root + 'test-output.html', 'utf-8', (err, data) => {
-			target = data;
+			target = data
+				.replace(/<!\-\-[^>]+>/g, '')
+				.replace(/[\r\n]/g, '')
+				.replace(/>\s+</g, '><')
+				.replace(/\s*([<>])\s*/g, '$1');
+
 			if (pdfDone) { done(); } else { htmlDone = true; }
 		});
 	});
 
-	it.skip('identifies paragraphs', ()=> {
+	it('identifies paragraphs', ()=> {
 		expect(source).equals(target);
 	});
 });
