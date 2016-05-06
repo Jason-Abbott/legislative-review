@@ -20,18 +20,18 @@ describe('Bill Outline', ()=> {
 	});
 
 	it('styles label', ()=> {
-		expect(outline.stylizeLabel('a')).equals('\\(a\\)');
+		expect(outline.formatLabel('a')).equals('\\(a\\)');
 	});
 
 	it('builds regular expression to match outline item', ()=> {
-		let pattern = outline.bulletItem(outline.style.ALPHA_LOWER, '(\\n|\\.)', 5);
+		let pattern = outline.itemPattern(outline.style.ALPHA_LOWER, '(\\n|\\.)', 5);
 		expect(pattern).equals(AtoFpattern);
 	});
 
 	it('builds regular expression to match outline', ()=> {
 		let valid = false;
 		try {
-			let re = new RegExp(outline.pattern);
+			let re = outline.pattern();
 			valid = (re != null && re.source.length > 0);
 		} catch (e) {
 			valid = false;
@@ -39,10 +39,22 @@ describe('Bill Outline', ()=> {
 		expect(valid).is.true;
 	});
 
-	it('matches outline in legislation', ()=> {
-		let match = bill.match(new RegExp(outline.pattern, 'g'));
+	it('matches major outline in legislation', ()=> {
+		let match = bill.match(outline.pattern());
 
 		expect(match).is.not.null;
 		expect(match).is.not.empty;
+		// four captures per label
+		expect(match.length).equals(26 * 4)
 	});
+	
+	it('matches second and third level labels', ()=> {
+		const section = '(1) In addition to the payments required pursuant to subsection s (a)(2) and (a) (4) of this section, every employer shall file a return upon such form as shall be prescribed by the state tax commission, but not more frequently than annually, or as required pursuant to any agree-ment between the state tax commission and the department of labor un-der section 63-3035B, Idaho Code, unless a shorter filing period and due date is prescribed by the state tax commission. The return shall be due on the last day of the second first month following the end of the period to which the return relates. The return shall:\n(i) Show, for the period to which it relates, the total amount of wages, salary, bonus or other emolument paid to his employees, the amount deducted therefrom in accordance with the provisions of the Internal Revenue Code, the amount deducted therefrom in accor-dance with the provisions of this section, the amount of any pre-vious payments made pursuant to this section, the amount of any deficiency due from the employer or refund payable by the state tax commission and such pertinent and necessary information as the state tax commission may require.\n(ii) Include a copy of the declaration of withholding provided to employees pursuant to subsection (b) paragraph (2) of this sub section.\n(2) Every employer making a declaration of withholding as provided herein shall furnish to the employees annually, but not later than thirty (30) days after the end of the calendar year, a record of the amount of tax withheld from such employee on forms to be prescribed, prepared and furnished by the state tax commission.\n(3) Every employer who is required, under Internal Revenue Code section 6011, to file returns on magnetic media, machine readable form or elec-tronic means, as defined in the Idaho uniform electronic transaction s act, may be required by rules of the state tax commission to file corre-sponding state returns on similar magnetic media, machine readable form or electronic means. Such rules may provide a different due date for such returns, which shall be no later than the date employers are re-quired to file such returns with the internal revenue service or the so-cial security administration and shall provide a five (5) business day period for an employer to correct errors in the electronic file received by the due date.'
+		let match = section.match(outline.pattern(1));
+		
+		expect(match).is.not.null;
+		expect(match).is.not.empty;
+		expect(match.length).equals(26 * 4);
+		expect(match[6]).equals('Every employer making a declaration of withholding as provided herein shall furnish to the employees annually, but not later than thirty (30) days after the end of the calendar year, a record of the amount of tax withheld from such employee on forms to be prescribed, prepared and furnished by the state tax commission.');
+	})
 });
