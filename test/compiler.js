@@ -17,8 +17,7 @@ require.extensions['.js'] = function(module, filename) {
 		module._compile(compiled, filename);
 		return module;
 	} else {
-		let m = original(module, filename);
-		return m;
+		return original(module, filename);
 	}
 };
 
