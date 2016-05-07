@@ -45,7 +45,7 @@ describe('PDF to HTML converter', ()=> {
 		expect(pdfToHtml.isUnderlined(el1, page)).is.false;
 	});
 
-	it.skip('creates well-formed HTML', done => {
+	it('creates well-formed HTML', done => {
 		let root = path.join(__dirname, '../');
 		let pending = 2;
 		let source = '';
@@ -55,7 +55,7 @@ describe('PDF to HTML converter', ()=> {
 			let parse = new PDFParser();
 			parse.on("pdfParser_dataError", err => { throw err	});
 			parse.on("pdfParser_dataReady", d => {
-				source = pdfToHtml.from(d);
+				source = pdfToHtml.parse(d);
 				if (--pending == 0) { expect(source).equals(target); done(); }
 			});
 			parse.parseBuffer(data);

@@ -16,6 +16,11 @@ describe('String Formatter', ()=> {
 		expect(format.curlyQuotes(source)).equals(target);
 
 	});
+	it('removes redundant HTML tags', ()=> {
+		const source = '<del>something</del> <del>something else</del>';
+		const target = '<del>something something else</del>';
+		expect(format.removeExtraTags(source)).equals(target);
+	});
 	it('replaces straight with curly apostrophes', ()=> {
 		const source = "no you didn't";
 		const target = 'no you didn&rsquo;t';
