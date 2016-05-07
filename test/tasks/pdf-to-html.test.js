@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const format = require('../../lib/format');
 const mocha = require('mocha');
 const expect = require('chai').expect;
 const PDFParser = require('pdf2json/PDFParser');
@@ -62,11 +63,9 @@ describe('PDF to HTML converter', ()=> {
 		});
 
 		fs.readFile(root + 'test-output.html', 'utf-8', (err, data) => {
-			target = data
+			target = format.removeExtraSpace(data
 				.replace(/<!\-\-[^>]+>/g, '')
-				.replace(/[\r\n]/g, '')
-				.replace(/>\s+</g, '><')
-				.replace(/\s*([<>])\s*/g, '$1');
+				.replace(/[\r\n]/g, ''));
 
 			if (--pending == 0) { expect(source).equals(target); done(); }
 		});
