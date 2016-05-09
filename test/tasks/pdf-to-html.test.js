@@ -46,28 +46,36 @@ describe('PDF to HTML converter', ()=> {
 		expect(pdfToHtml.isUnderlined(el1, page)).is.false;
 	});
 
-	it('creates well-formed HTML', done => {
-		let root = path.join(__dirname, '../');
-		let pending = 2;
-		let source = '';
-		let target = '';
+	it('creates well-formed HTML 1', done => {
+		compareFiles(1, done);
+	});
 
-		fs.readFile(root + 'test-input.pdf', (err, data) => {
-			let parse = new PDFParser();
-			parse.on("pdfParser_dataError", err => { throw err	});
-			parse.on("pdfParser_dataReady", d => {
-				source = pdfToHtml.parse(d);
-				if (--pending == 0) { expect(source).equals(target); done(); }
-			});
-			parse.parseBuffer(data);
-		});
-
-		fs.readFile(root + 'test-output.html', 'utf-8', (err, data) => {
-			target = format.removeExtraSpace(data
-				.replace(/<!\-\-[^>]+>/g, '')
-				.replace(/[\r\n]/g, ''));
-
-			if (--pending == 0) { expect(source).equals(target); done(); }
-		});
+	it.skip('creates well-formed HTML 2', done => {
+		compareFiles(2, done);
 	});
 });
+
+function compareFiles(version, done) {
+	let root = path.join(__dirname, '../');
+	let pending = 2;
+	let source = '';
+	let target = '';
+
+	fs.readFile(root + 'test-input' + version + '.pdf', (err, data) => {
+		let parse = new PDFParser();
+		parse.on("pdfParser_dataError", err => { throw err	});
+		parse.on("pdfParser_dataReady", d => {
+			source = pdfToHtml.parse(d);
+			if (--pending == 0) { expect(source).equals(target); done(); }
+		});
+		parse.parseBuffer(data);
+	});
+
+	fs.readFile(root + 'test-output' + version + '.html', 'utf-8', (err, data) => {
+		target = format.removeExtraSpace(data
+			.replace(/<!\-\-[^>]+>/g, '')
+			.replace(/[\r\n]/g, ''));
+
+		if (--pending == 0) { expect(source).equals(target); done(); }
+	});
+}
