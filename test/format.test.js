@@ -16,6 +16,7 @@ describe('String Formatter', ()=> {
 		expect(format.curlyQuotes(source)).equals(target);
 
 	});
+	
 	it('removes extra spaces', ()=> {
 		expect(format.removeExtraSpace('one , two, three')).equals('one, two, three');
 		// remove space between block tags
@@ -24,16 +25,23 @@ describe('String Formatter', ()=> {
 		expect(format.removeExtraSpace('<ins>one</ins> <del>two</del>')).equals('<ins>one</ins> <del>two</del>');
 		// leading tag space
 		expect(format.removeExtraSpace('<p attr="one"> two')).equals('<p attr="one">two');
+		// before block tag
+		expect(format
+			.removeExtraSpace('where such payment is made:   <ol style="list-style-type: decimal;"><li>Shall'))
+			.equals('where such payment is made:<ol style="list-style-type: decimal;"><li>Shall')
 	});
+	
 	it('normalize dashes', ()=> {
 		expect(format.dashes('em-dash --   after')).equals('em-dash &mdash; after');
 		expect(format.dashes('some- thing')).equals('some-thing');
 	});
+	
 	it('removes redundant HTML tags', ()=> {
 		const source = '<del>one</del> <del>two three</del>';
 		const target = '<del>one two three</del>';
 		expect(format.removeExtraTags(source)).equals(target);
 	});
+	
 	it('replaces straight with curly apostrophes', ()=> {
 		const source = "no you didn't";
 		const target = 'no you didn&rsquo;t';

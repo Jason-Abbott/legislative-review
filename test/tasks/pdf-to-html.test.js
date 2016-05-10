@@ -46,13 +46,9 @@ describe('PDF to HTML converter', ()=> {
 		expect(pdfToHtml.isUnderlined(el1, page)).is.false;
 	});
 
-	it('creates well-formed HTML 1', done => {
-		compareFiles(1, done);
-	});
+	it('creates well-formed HTML 1', done => { compareFiles(1, done); });
 
-	it.skip('creates well-formed HTML 2', done => {
-		compareFiles(2, done);
-	});
+	it('creates well-formed HTML 2', done => { compareFiles(2, done); });
 });
 
 function compareFiles(version, done) {
