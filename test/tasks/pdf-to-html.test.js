@@ -47,12 +47,12 @@ describe('PDF to HTML converter', ()=> {
 	});
 
 	it('creates well-formed HTML 1', done => { compareFiles(1, done); });
-
 	it('creates well-formed HTML 2', done => { compareFiles(2, done); });
+	it('creates well-formed HTML 3', done => { compareFiles(3, done); });
 });
 
 function compareFiles(version, done) {
-	let root = path.join(__dirname, '../');
+	let root = path.join(__dirname, '../pdf-to-html/');
 	let pending = 2;
 	let source = '';
 	let target = '';

@@ -15,12 +15,29 @@ describe('String Formatter', ()=> {
 
 		expect(format.curlyQuotes(source)).equals(target);
 
+		source = '<li>"Appraisal assignment" means';
+		target = '<li>&ldquo;Appraisal assignment&rdquo; means';
+
+		expect(format.curlyQuotes(source)).equals(target);
+
+		source = '<ins>"</ins>forest land<ins>"</ins>';
+		target = '<ins>&ldquo;</ins>forest land<ins>&rdquo;</ins>';
+
+		expect(format.curlyQuotes(source)).equals(target);
 	});
 	
 	it('removes extra spaces', ()=> {
 		expect(format.removeExtraSpace('one , two, three')).equals('one, two, three');
 		// remove space between block tags
 		expect(format.removeExtraSpace('<div>one</div> <div>two</div>')).equals('<div>one</div><div>two</div>');
+		expect(format
+			.removeExtraSpace('estate.</li>		<li>&ldquo;Appraisal'))
+			.equals('estate.</li><li>&ldquo;Appraisal');
+
+		expect(format
+			.removeExtraSpace('<div>AN ACT	<p class="summary">RELATING'))
+			.equals('<div>AN ACT<p class="summary">RELATING');
+
 		// retain space between inline tags
 		expect(format.removeExtraSpace('<ins>one</ins> <del>two</del>')).equals('<ins>one</ins> <del>two</del>');
 		// leading tag space
