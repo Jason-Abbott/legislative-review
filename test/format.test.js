@@ -12,17 +12,18 @@ describe('String Formatter', ()=> {
 
 		source = '"quote at beginning of line" should work';
 		target = '&ldquo;quote at beginning of line&rdquo; should work';
-
 		expect(format.curlyQuotes(source)).equals(target);
 
 		source = '<li>"Appraisal assignment" means';
 		target = '<li>&ldquo;Appraisal assignment&rdquo; means';
-
 		expect(format.curlyQuotes(source)).equals(target);
 
 		source = '<ins>"</ins>forest land<ins>"</ins>';
 		target = '<ins>&ldquo;</ins>forest land<ins>&rdquo;</ins>';
-
+		expect(format.curlyQuotes(source)).equals(target);
+		
+		source = '"Provider(s)" means';
+		target = '&ldquo;Provider(s)&rdquo; means';
 		expect(format.curlyQuotes(source)).equals(target);
 	});
 	
@@ -42,6 +43,7 @@ describe('String Formatter', ()=> {
 		expect(format.removeExtraSpace('<ins>one</ins> <del>two</del>')).equals('<ins>one</ins> <del>two</del>');
 		// leading tag space
 		expect(format.removeExtraSpace('<p attr="one"> two')).equals('<p attr="one">two');
+		expect(format.removeExtraSpace('<ins> &mdash;')).equals('<ins>&mdash;');
 		// before block tag
 		expect(format
 			.removeExtraSpace('where such payment is made:   <ol style="list-style-type: decimal;"><li>Shall'))
@@ -51,6 +53,7 @@ describe('String Formatter', ()=> {
 	it('normalize dashes', ()=> {
 		expect(format.dashes('em-dash --   after')).equals('em-dash &mdash; after');
 		expect(format.dashes('some- thing')).equals('some-thing');
+		expect(format.dashes('<ins>-- POWDERED')).equals('<ins> &mdash; POWDERED');
 	});
 	
 	it('removes redundant HTML tags', ()=> {
@@ -61,8 +64,16 @@ describe('String Formatter', ()=> {
 	});
 	
 	it('replaces straight with curly apostrophes', ()=> {
-		const source = "no you didn't";
-		const target = 'no you didn&rsquo;t';
+		let source = "no you didn't";
+		let target = 'no you didn&rsquo;t';
+		expect(format.apostrophes(source)).equals(target);
+
+		source = 'plural possessives\'';
+		target = 'plural possessives&rsquo;';
+		expect(format.apostrophes(source)).equals(target);
+
+		source = 'physicians\' assistants';
+		target = 'physicians&rsquo; assistants';
 		expect(format.apostrophes(source)).equals(target);
 	});
 });
