@@ -57,6 +57,7 @@ describe('String Formatter', ()=> {
 		const source = '<del>one</del> <del>two three</del>';
 		const target = '<del>one two three</del>';
 		expect(format.removeExtraTags(source)).equals(target);
+		expect(format.removeEmptyTags('<p></p>')).equals('');
 	});
 	
 	it('replaces straight with curly apostrophes', ()=> {
