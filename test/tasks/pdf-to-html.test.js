@@ -50,34 +50,31 @@ describe('PDF to HTML converter', ()=> {
 		expect(pdfToHtml.isUnderlined(el2, page)).is.false;
 	});
 
-	it('creates well-formed HTML 1', done => { compareFiles(1, done); });
-	it('creates well-formed HTML 2', done => { compareFiles(2, done); });
-	it('creates well-formed HTML 3', done => { compareFiles(3, done); });
-	it('creates well-formed HTML 4', done => { compareFiles(4, done); });
-	it('creates well-formed HTML 5', done => { compareFiles(5, done); });
-});
-
-function compareFiles(version, done) {
 	let root = path.join(__dirname, '../pdf-to-html/');
-	let pending = 2;
-	let source = '';
-	let target = '';
+	
+	for (let i = 1; i <= 6; i++) {
+		it('creates well-formed HTML ' + i, done => {
+			let pending = 2;
+			let source = '';
+			let target = '';
 
-	fs.readFile(root + 'test-input' + version + '.pdf', (err, data) => {
-		let parse = new PDFParser();
-		parse.on("pdfParser_dataError", err => { throw err	});
-		parse.on("pdfParser_dataReady", d => {
-			source = pdfToHtml.parse(d);
-			if (--pending == 0) { expect(source).equals(target); done(); }
-		});
-		parse.parseBuffer(data);
-	});
+			fs.readFile(root + 'test-input' + i + '.pdf', (err, data) => {
+				let parse = new PDFParser();
+				parse.on("pdfParser_dataError", err => { throw err	});
+				parse.on("pdfParser_dataReady", d => {
+					source = pdfToHtml.parse(d);
+					if (--pending == 0) { expect(source).equals(target); done(); }
+				});
+				parse.parseBuffer(data);
+			});
 
-	fs.readFile(root + 'test-output' + version + '.html', 'utf-8', (err, data) => {
-		target = format.removeExtraSpace(data
-			.replace(/<!\-\-[^>]+>/g, '')
-			.replace(/[\r\n]/g, ''));
+			fs.readFile(root + 'test-output' + i + '.html', 'utf-8', (err, data) => {
+				target = format.removeExtraSpace(data
+					.replace(/<!\-\-[^>]+>/g, '')
+					.replace(/[\r\n]/g, ''));
 
-		if (--pending == 0) { expect(source).equals(target); done(); }
-	});
-}
+				if (--pending == 0) { expect(source).equals(target); done(); }
+			});
+		})
+	}
+});
