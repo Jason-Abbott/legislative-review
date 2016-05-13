@@ -7,6 +7,7 @@ const mocha = require('mocha');
 const expect = require('chai').expect;
 const PDFParser = require('pdf2json/PDFParser');
 const pdfToHtml = require('../../lib/tasks/pdf-to-html');
+const testRange = [1,7];
 
 describe('PDF to HTML converter', ()=> {	
 	it('converts units to a standard', ()=> {
@@ -52,7 +53,7 @@ describe('PDF to HTML converter', ()=> {
 
 	let root = path.join(__dirname, '../pdf-to-html/');
 	
-	for (let i = 1; i <= 6; i++) {
+	for (let i = testRange[0]; i <= testRange[1]; i++) {
 		it('creates well-formed HTML ' + i, done => {
 			let pending = 2;
 			let source = '';

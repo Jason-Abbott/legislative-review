@@ -40,10 +40,10 @@ describe('Bill Outline', ()=> {
 	});
 
 	it('calculates label pattern capture counts', ()=> {
-		expect(outline.captures.firstLabelAt).equals(7);
-		expect(outline.captures.perLabel).equals(13);
-		expect(outline.captures.indexForLabel(1)).equals(7);
-		expect(outline.captures.indexForLabel(3)).equals(33);
+		expect(outline.captures.firstLabelAt).equals(3);
+		expect(outline.captures.perLabel).equals(4);
+		expect(outline.captures.indexForLabel(1)).equals(3);
+		expect(outline.captures.indexForLabel(3)).equals(11);
 	});
 
 	it('matches major outline in legislation', ()=> {
