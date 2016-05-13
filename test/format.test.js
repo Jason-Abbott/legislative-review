@@ -50,23 +50,24 @@ describe('String Formatter', ()=> {
 			.equals('where such payment is made:<ol style="list-style-type: decimal;"><li>Shall')
 	});
 	
-	it.skip('formats tables', ()=> {
-		const source = 'Arbitrary text\n' +
+	it('formats index lists', ()=> {
+		const source = 'Vehicle text\n' +
 			'Vehicles one (1) and two (2) years old .........................$69.00\n' +
 			'Vehicles three (3) and four (4) years old ......................$57.00\n' +
 			'Vehicles five (5) and six (6) years old ........................$57.00\n' +
 			'Vehicles seven (7) and eight (8) years old .....................$45.00\n' +
 			'Vehicles over eight (8) years old .............................$45.00\n' +
-			'Arbitrary text';
-		const target = 'Arbitrary text<table class="index">' +
+			'Vehicle text';
+		const target = 'Vehicle text<table class="index">' +
 			'<tr><td>Vehicles one (1) and two (2) years old</td><td>$69.00</td></tr>' +
 			'<tr><td>Vehicles three (3) and four (4) years old</td><td>$57.00</td></tr>' +
 			'<tr><td>Vehicles five (5) and six (6) years old</td><td>$57.00</td></tr>' +
 			'<tr><td>Vehicles seven (7) and eight (8) years old</td><td>$45.00</td></tr>' +
 			'<tr><td>Vehicles over eight (8) years old</td><td>$45.00</td></tr>' +
-			'</table>Arbitrary text';
+			'</table>Vehicle text';
 		
-		expect(format.indexes(source)).equals(target);
+		expect(format.indexes(source + source.replace(/Vehicle/g, 'Motorcycle')))
+			.equals(target + target.replace(/Vehicle/g, 'Motorcycle'));
 	});
 	
 	it('normalize dashes', ()=> {
