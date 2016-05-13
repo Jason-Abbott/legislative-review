@@ -31,6 +31,8 @@ describe('String Formatter', ()=> {
 		expect(format.removeExtraSpace('one , two, three')).equals('one, two, three');
 		// remove space between block tags
 		expect(format.removeExtraSpace('<div>one</div> <div>two</div>')).equals('<div>one</div><div>two</div>');
+		expect(format.removeExtraSpace('</tr>		<tr>')).equals('</tr><tr>');
+		
 		expect(format
 			.removeExtraSpace('estate.</li>		<li>&ldquo;Appraisal'))
 			.equals('estate.</li><li>&ldquo;Appraisal');
@@ -47,28 +49,30 @@ describe('String Formatter', ()=> {
 		// before block tag
 		expect(format
 			.removeExtraSpace('where such payment is made:   <ol style="list-style-type: decimal;"><li>Shall'))
-			.equals('where such payment is made:<ol style="list-style-type: decimal;"><li>Shall')
+			.equals('where such payment is made:<ol style="list-style-type: decimal;"><li>Shall');
+		// around tables
+		expect(format.removeExtraSpace('be:  <table>')).equals('be:<table>');
+		
 	});
 	
 	it('formats index lists', ()=> {
-		const source = 'Vehicle text\n' +
-			'Vehicles one (1) and two (2) years old .........................$69.00\n' +
-			'Vehicles three (3) and four (4) years old ......................$57.00\n' +
-			'Vehicles five (5) and six (6) years old ........................$57.00\n' +
-			'Vehicles seven (7) and eight (8) years old .....................$45.00\n' +
-			'Vehicles over eight (8) years old .............................$45.00\n' +
-			'Vehicle text';
-		const target = 'Vehicle text<table class="index">' +
+		let source = 'shall be:' +
+			'Vehicles one (1) and two (2) years old .........................$69.00 ' +
+			'Vehicles three (3) and four (4) years old ......................$57.00 ' +
+			'Vehicles five (5) and six (6) years old ........................$57.00 ' +
+			'Vehicles seven (7) and eight (8) years old .....................$45.00 ' +
+			'Vehicles over eight (8) years old .............................$45.00 ' +
+			'There shall be twelve (12) registration periods, starting in January for holders';
+		let target = 'shall be:<table class="index">' +
 			'<tr><td>Vehicles one (1) and two (2) years old</td><td>$69.00</td></tr>' +
 			'<tr><td>Vehicles three (3) and four (4) years old</td><td>$57.00</td></tr>' +
 			'<tr><td>Vehicles five (5) and six (6) years old</td><td>$57.00</td></tr>' +
 			'<tr><td>Vehicles seven (7) and eight (8) years old</td><td>$45.00</td></tr>' +
 			'<tr><td>Vehicles over eight (8) years old</td><td>$45.00</td></tr>' +
-			'</table>Vehicle text';
+			'</table>There shall be twelve (12) registration periods, starting in January for holders';
 		
-		expect(format.indexes(source + source.replace(/Vehicle/g, 'Motorcycle')))
-			.equals(target + target.replace(/Vehicle/g, 'Motorcycle'));
-	});
+		expect(format.indexes(source)).equals(target);
+});
 	
 	it('normalize dashes', ()=> {
 		expect(format.dashes('em-dash --   after')).equals('em-dash &mdash; after');
