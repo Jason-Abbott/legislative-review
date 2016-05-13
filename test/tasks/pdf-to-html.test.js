@@ -37,19 +37,23 @@ describe('PDF to HTML converter', ()=> {
 				{ x: 6.26, y: 36.884, w: 0.822, l: 3.699 }
 			]
 		};
-		let el1 = { x: 31.872999999999998, y: 35.226, w: 26.301 };
-		let el2 = { x: 6.01, y: 35.98, w: 59.178 };
+		let el1 = { x: 31.872999999999998, y: 35.226, w: 26.301, clr: 0 };
+		let el2 = { x: 6.01, y: 35.98, w: 59.178, clr: 0 };
 
 		expect(pdfToHtml.isStricken(el1, page)).is.true;
 		expect(pdfToHtml.isUnderlined(el2, page)).is.true;
 		expect(pdfToHtml.isStricken(el2, page)).is.false;
 		expect(pdfToHtml.isUnderlined(el1, page)).is.false;
+
+		// exclude hyperlink underlining indicated by blue text color
+		el2.clr = 35;
+		expect(pdfToHtml.isUnderlined(el2, page)).is.false;
 	});
 
-	//it('creates well-formed HTML 1', done => { compareFiles(1, done); });
-	//it('creates well-formed HTML 2', done => { compareFiles(2, done); });
-	//it('creates well-formed HTML 3', done => { compareFiles(3, done); });
-	//it('creates well-formed HTML 4', done => { compareFiles(4, done); });
+	it('creates well-formed HTML 1', done => { compareFiles(1, done); });
+	it('creates well-formed HTML 2', done => { compareFiles(2, done); });
+	it('creates well-formed HTML 3', done => { compareFiles(3, done); });
+	it('creates well-formed HTML 4', done => { compareFiles(4, done); });
 	it('creates well-formed HTML 5', done => { compareFiles(5, done); });
 });
 
