@@ -7,9 +7,16 @@ const mocha = require('mocha');
 const expect = require('chai').expect;
 const PDFParser = require('pdf2json/PDFParser');
 const pdfToHtml = require('../../lib/tasks/pdf-to-html');
-const testRange = [1,9];
+const testRange = [9,9];
 
-describe('PDF to HTML converter', ()=> {	
+
+describe('PDF to HTML converter', ()=> {
+	it('rounds numbers', ()=> {
+		const round = pdfToHtml.round(2);
+		expect(round(3.833333)).equals(3.83);
+		expect(round(3.836666)).equals(3.84);
+	});
+	
 	it('converts units to a standard', ()=> {
 		const pdfWidth = 34;
 		const unitWidth = 8.5;
