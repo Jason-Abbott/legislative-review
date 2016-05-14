@@ -25,7 +25,7 @@ describe('Bill Outline', ()=> {
 	it('styles label', ()=> {
 		outline.config.format = '(%s)';
 		expect(formatLabel('a')).equals('\\(a\\)');
-		expect(formatLabel('b', false)).equals('(b)');
+		expect(formatLabel('b', false, false)).equals('(b)');
 	});
 
 	it('builds regular expression to match outline', ()=> {
