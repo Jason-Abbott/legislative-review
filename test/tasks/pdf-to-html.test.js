@@ -7,7 +7,7 @@ const mocha = require('mocha');
 const expect = require('chai').expect;
 const PDFParser = require('pdf2json/PDFParser');
 const pdfToHtml = require('../../lib/tasks/pdf-to-html');
-const testRange = [1,9];
+const testRange = [1,10];
 
 
 describe('PDF to HTML converter', ()=> {
