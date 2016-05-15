@@ -16,7 +16,7 @@
     "public:watch": "parallelshell \"npm run watch:css -s\" \"npm run public:watch:js -s\"",
     "public:watch:css": "nodemon -e scss --watch src/sass --exec 'npm run public:build:css'",
     "public:watch:js": "nodemon -e js,json,jsx --watch lib --exec 'npm run public:build:js'",
-    "test": "node_modules/.bin/mocha",
+    "test": "node_modules/.bin/mocha --recursive",
     "build:font": "webfont-dl \"http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,100|Roboto+Condensed:400,700\" --css-rel=./fonts -o dist/fonts/webfont.css",
     "flushdns:osx": "dscacheutil -flushcache; sudo killall -HUP mDNSResponder",
     "admin:build:js": "browserify ./lib/admin-app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/admin.js",
