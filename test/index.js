@@ -6,7 +6,8 @@ const ReactDOM = require('react-dom');
 const ReactTest = require('react-addons-test-utils');
 
 module.exports = {
-	is: require('../lib/is'),
+	is: require('../lib/utils/is'),
+	format: require('../lib/utils/format'),
 	routes: require('../lib/routes'),
 	views: require('../lib/views/'),
 	components: require('../lib/components/'),

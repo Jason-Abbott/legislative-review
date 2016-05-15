@@ -1,6 +1,6 @@
 	'use strict';
 
-const format = require('../lib/format');
+const { format } = require('./');
 const mocha = require('mocha');
 const expect = require('chai').expect;
 

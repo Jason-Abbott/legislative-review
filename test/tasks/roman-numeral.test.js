@@ -2,7 +2,7 @@
 
 const mocha = require('mocha');
 const expect = require('chai').expect;
-const roman = require('../../lib/tasks/roman-numeral');
+const roman = require('../../lib/utils/roman-numeral');
 
 describe('Roman Numeral Converter', ()=> {
 	it('converts to arabic', ()=> {

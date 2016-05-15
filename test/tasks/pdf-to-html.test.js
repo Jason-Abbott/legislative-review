@@ -2,11 +2,11 @@
 
 const path = require('path');
 const fs = require('fs');
-const format = require('../../lib/format');
+const format = require('../../lib/utils/format');
 const mocha = require('mocha');
 const expect = require('chai').expect;
 const PDFParser = require('pdf2json/PDFParser');
-const pdfToHtml = require('../../lib/tasks/pdf-to-html');
+const pdfToHtml = require('../../lib/utils/pdf-to-html');
 const testRange = [1, 15];
 
 

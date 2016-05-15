@@ -7,7 +7,7 @@
     "name": "Jason Abbott"
   },
   "engines": {
-    "node": ">=5.0.0"
+    "node": ">=6.0.0"
   },
   "scripts": {
     "public:build:js": "browserify ./lib/public-app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/public.js",

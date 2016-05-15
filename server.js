@@ -115,6 +115,5 @@ cache.load(() => {
 
 	http.createServer(cache.send.bind(cache)).listen(port, ()=> {
 		console.info("Starting Legislative Review on port %s", port);
-		
 	});
 });
