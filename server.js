@@ -4,6 +4,7 @@
 const fs = require('fs');
 const compress = require('zlib');
 const path = require('path');
+const log = require('./lib/utils/logs');
 const root = path.join(__dirname, './dist/');
 const now = (new Date()).getTime();
 const home = { public: 'public.html', admin: 'admin.html' };
@@ -114,6 +115,6 @@ cache.load(() => {
 	tasks.start();
 
 	http.createServer(cache.send.bind(cache)).listen(port, ()=> {
-		console.info("Starting Legislative Review on port %s", port);
+		log.info("Starting Legislative Review on port " + port);
 	});
 });

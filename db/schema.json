@@ -87,11 +87,12 @@
 	},
 
 	"log": {
-		"<id>": {
-			"on": 0,
-			"type": 0,
+		"<uid>": {
+			"at": 0,
+			"level": 0,
 			"userID": 0,
 			"message": null,
+			"stack": null,
 			"environment": null
 		}
 	}
