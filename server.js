@@ -4,7 +4,6 @@
 const fs = require('fs');
 const compress = require('zlib');
 const path = require('path');
-const log = require('./lib/utils/logs');
 const root = path.join(__dirname, './dist/');
 const now = (new Date()).getTime();
 const home = { public: 'public.html', admin: 'admin.html' };
@@ -111,7 +110,12 @@ cache.load(() => {
 	const http = require('http');
 	const port = process.env['PORT'] || 3000;
 	const tasks = require('./lib/tasks');
-	
+	const config = require('./lib/config');
+	const log = require('./lib/utils/logs');
+	const db = require('./lib/utils/db');
+
+	config.db.key = process.env['FIREBASE_SECRET'];
+	db.connect();	
 	tasks.start();
 
 	http.createServer(cache.send.bind(cache)).listen(port, ()=> {

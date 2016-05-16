@@ -59,10 +59,12 @@
 
 	"post": [{
 		"id": null,
-		"author": null,
+		"author": "<userid>",
 		"slug": null,
 		"title": null,
-		"html": null
+		"html": null,
+		"showAt": null,
+		"hideAfter": null
 	}],
 
 	"comment": [{
