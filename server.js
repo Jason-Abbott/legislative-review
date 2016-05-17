@@ -12,6 +12,7 @@ const allow = {
 	folders: /^(fonts|img|partials)$/,
 	files: /(html|css|js|jpg|png|ico|gif|svg|ttf|woff|woff2|otf)$/i
 };
+const test = process.env['NODE_ENV'] === 'development';
 // extensions of files that will be gzipped
 const zippable = /(html|css|js|svg|ttf|otf)$/;
 const mimeTypes = {
@@ -25,16 +26,16 @@ const mimeTypes = {
 	woff: 'application/font-woff',
 	woff2: 'application/font-woff2'
 };
-const cache = {
+const responder = {
 	items: {},
 	pending: 0,
 	loaded: null,
 
 	// add buffer to cache
 	add(name, buffer, compressed) {
-		let parts = name.split('.');
+		let [, ext] = name.split('.');
 		this.items[name] = {
-			mimeType: mimeTypes[parts[parts.length - 1]],
+			mimeType: mimeTypes[ext],
 			buffer: buffer,
 			compressed: compressed,
 			eTag: name + now
@@ -59,29 +60,50 @@ const cache = {
 		});
 	},
 
-	// load folder of files to cache
-	load(fnOrPath) {
-		let path = '';
-		if (typeof fnOrPath == 'function') {
-			this.loaded = fnOrPath;
+	prepare(callback) {
+		if (test) {
+			this.send = this.sendFile;
+			callback();
 		} else {
-			path = fnOrPath + '/';
+			this.send = this.sendFromCache;
+			this.loaded = callback;
+			this.addFolder();
 		}
+	},
+
+	// load folder of files to responder
+	addFolder(path = '') {
+		path += '/';
 		fs.readdir(root + path, (err, files) => {
 			files.forEach(f => {
 				if (allow.folders.test(f)) {
-					this.load(path + f);
+					this.addFolder(path + f);
 				} else if (allow.files.test(f)) {
 					this.pending++;
 					this.addFile(path + f)
 				}
 			});
 		});
-		return this;
+	},
+
+	send(req, res) { throw new NotImplementedException(); },
+
+	sendFile(req, res) {
+		let url = req.url.replace(/^\//, '');
+
+		fs.readFile(root + name, (err, content) => {
+			if (err === null && content !== null) {
+				res.writeHead(200, headers);
+				res.write(content);
+				res.end();
+			} else {
+
+			}
+		});
 	},
 
 	// send cached file
-	send(req, res) {
+	sendFromCache(req, res) {
 		let url = req.url.replace(/^\//, '');
 	
 		if (url === '') {
@@ -90,6 +112,7 @@ const cache = {
 		}
 		let item = this.items[url];
 		if (item === undefined) { item = this.items[home.public]; }
+
 		let headers = {
 			'Cache-Control': 'max-age=86400, public',
 			'ETag': item.eTag,
@@ -104,14 +127,11 @@ const cache = {
 	},
 
 	next() {
-		if (--this.pending == 0 && this.loaded !== null) {
-			//this.items['admin'] = this.items[home.admin];
-			this.loaded();
-		}
+		if (--this.pending == 0 && this.loaded !== null) { this.loaded();	}
 	}
 };
 
-cache.load(() => {
+responder.prepare(() => {
 	const http = require('http');
 	const port = process.env['PORT'] || 3000;
 	const tasks = require('./lib/tasks');
@@ -123,7 +143,7 @@ cache.load(() => {
 	db.connect();	
 	tasks.start();
 
-	http.createServer(cache.send.bind(cache)).listen(port, ()=> {
+	http.createServer(responder.send.bind(responder)).listen(port, ()=> {
 		log.info("Starting Legislative Review on port " + port);
 	});
 });
