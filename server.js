@@ -83,7 +83,11 @@ const cache = {
 	// send cached file
 	send(req, res) {
 		let url = req.url.replace(/^\//, '');
-		if (url === '') { url = home.public; }
+	
+		if (url === '') {
+			const parts = req.headers['host'].split('.');
+			url = (parts[0] == 'admin') ? home.admin : home.public;
+		}
 		let item = this.items[url];
 		if (item === undefined) { item = this.items[home.public]; }
 		let headers = {
@@ -91,6 +95,7 @@ const cache = {
 			'ETag': item.eTag,
 			'Content-Type': item.mimeType + ';charset=utf-8'
 		};
+			
 		if (item.compressed) { headers['Content-Encoding'] = 'gzip'; }
 		
 		res.writeHead(200, headers);
@@ -100,7 +105,7 @@ const cache = {
 
 	next() {
 		if (--this.pending == 0 && this.loaded !== null) {
-			this.items['admin'] = this.items[home.admin];
+			//this.items['admin'] = this.items[home.admin];
 			this.loaded();
 		}
 	}
