@@ -7,7 +7,7 @@
     "name": "Jason Abbott"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=6.2.0"
   },
   "scripts": {
     "public:build:js": "browserify ./lib/public-app.js -t [ babelify --presets [ es2015 react ] ] -p [ minifyify --no-map --uglify [ --c drop_debugger:true --screw-ie8 ] ] > ./dist/public.js",
@@ -26,9 +26,9 @@
   },
   "dependencies": {
     "cheerio": "^0.20.0",
-    "firebase": "^2.4.2",
+    "firebase": "^3.0.0",
     "pdf2json": "^1.1.5",
-    "superagent": "^1.7.2"
+    "superagent": "^2.0.0-alpha.3"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
@@ -39,15 +39,15 @@
     "browserify": "^13.0.0",
     "chai": "^3.4.1",
     "clean-css": "^3.4.10",
-    "draft-js": "^0.7.0",
     "jsdom": "^8.2.0",
     "minifyify": "^7.3.1",
     "mocha": "^2.3.4",
     "node-sass": "^3.7.0",
     "nodemon": "^1.9.0",
-    "react": "^15.0.0",
+    "react": "^15.0.2",
     "react-addons-test-utils": "^15.0.0",
-    "react-dom": "^15.0.0",
+    "react-dom": "^15.0.2",
+    "react-rte": "^0.2.0",
     "webfont-dl": "^0.1.2"
   },
   "repository": {
