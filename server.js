@@ -89,15 +89,25 @@ const responder = {
 	send(req, res) { throw new NotImplementedException(); },
 
 	sendFile(req, res) {
-		let url = req.url.replace(/^\//, '');
+		let name = req.url.replace(/^\//, '');
 
-		fs.readFile(root + name, (err, content) => {
-			if (err === null && content !== null) {
-				res.writeHead(200, headers);
-				res.write(content);
-				res.end();
+		if (name === '') {
+			const parts = req.headers['host'].split('.');
+			name = (parts[0] == 'admin') ? home.admin : home.public;
+		}
+
+		let [, ext] = name.split('.');
+		let path = root + name;
+
+		fs.exists(path, found => {
+			if (found) {
+				res.writeHead(200, {	'Content-Type': mimeTypes[ext] + ';charset=utf-8' });
+				let stream = fs.createReadStream(root + name);
+				stream.pipe(res);
 			} else {
-
+				console.warn(path + ' not found');
+				res.writeHead(404);
+				res.end();
 			}
 		});
 	},
@@ -126,9 +136,7 @@ const responder = {
 		res.end();
 	},
 
-	next() {
-		if (--this.pending == 0 && this.loaded !== null) { this.loaded();	}
-	}
+	next() {	if (--this.pending == 0 && this.loaded !== null) { this.loaded();	}	}
 };
 
 responder.prepare(() => {
@@ -141,7 +149,7 @@ responder.prepare(() => {
 
 	config.db.key = process.env['FIREBASE_SECRET'];
 	db.connect();	
-	tasks.start();
+	//tasks.start();
 
 	http.createServer(responder.send.bind(responder)).listen(port, ()=> {
 		log.info("Starting Legislative Review on port " + port);
