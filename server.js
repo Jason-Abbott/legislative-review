@@ -142,13 +142,16 @@ const responder = {
 responder.prepare(() => {
 	const http = require('http');
 	const port = process.env['PORT'] || 3000;
-	const tasks = require('./lib/tasks');
 	const config = require('./lib/config');
 	const log = require('./lib/utils/logs');
 	const db = require('./lib/utils/db');
 
-	config.db.key = process.env['FIREBASE_SECRET'];
-	db.connect();	
+	config.db.serviceAccount.clientEmail = process.env['FIREBASE_EMAIL'];
+	config.db.serviceAccount.privateKey = '-----BEGIN PRIVATE KEY-----\n' +
+		process.env['FIREBASE_KEY'].replace(/\\n/g, '\n') + '\n-----END PRIVATE KEY-----\n';
+
+	db.connect();
+	const tasks = require('./lib/tasks');
 	//tasks.start();
 
 	http.createServer(responder.send.bind(responder)).listen(port, ()=> {
