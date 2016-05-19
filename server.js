@@ -12,7 +12,7 @@ const allow = {
 	folders: /^(fonts|img|partials)$/,
 	files: /(html|css|js|jpg|png|ico|gif|svg|ttf|woff|woff2|otf)$/i
 };
-const test = process.env['NODE_ENV'] === 'development';
+const test = true;
 // extensions of files that will be gzipped
 const zippable = /(html|css|js|svg|ttf|otf)$/;
 const mimeTypes = {
