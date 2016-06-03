@@ -12,7 +12,7 @@ const allow = {
 	folders: /^(fonts|img|partials)$/,
 	files: /(html|css|js|jpg|png|ico|gif|svg|ttf|woff|woff2|otf)$/i
 };
-const test = true;
+const testMode = process.env['NODE_MODE'] == 'test';
 // extensions of files that will be gzipped
 const zippable = /(html|css|js|svg|ttf|otf)$/;
 const mimeTypes = {
@@ -31,12 +31,12 @@ const responder = {
 	pending: 0,
 	loaded: null,
 
-	// add buffer to cache
-	add(name, buffer, compressed) {
+	// add file bytes to cache
+	add(name, bytes, compressed) {
 		let [, ext] = name.split('.');
 		this.items[name] = {
 			mimeType: mimeTypes[ext],
-			buffer: buffer,
+			buffer: bytes,
 			compressed: compressed,
 			eTag: name + now
 		};
@@ -61,10 +61,12 @@ const responder = {
 	},
 
 	prepare(callback) {
-		if (test) {
+		if (testMode) {
+         // load files as requested
 			this.send = this.sendFile;
 			callback();
 		} else {
+			// pre-load all files
 			this.send = this.sendFromCache;
 			this.loaded = callback;
 			this.addFolder();
@@ -86,23 +88,18 @@ const responder = {
 		});
 	},
 
-	send(req, res) { throw new NotImplementedException(); },
+   // method that will send the response
+	send() { throw new NotImplementedException(); },
 
 	sendFile(req, res) {
-		let name = req.url.replace(/^\//, '');
+      const path = this.normalizeUrl(req);
+		const [, ext] = path.split('.');
+		const url = root + path;
 
-		if (name === '') {
-			const parts = req.headers['host'].split('.');
-			name = (parts[0] == 'admin') ? home.admin : home.public;
-		}
-
-		let [, ext] = name.split('.');
-		let path = root + name;
-
-		fs.exists(path, found => {
+		fs.exists(url, found => {
 			if (found) {
 				res.writeHead(200, {	'Content-Type': mimeTypes[ext] + ';charset=utf-8' });
-				let stream = fs.createReadStream(root + name);
+				const stream = fs.createReadStream(url);
 				stream.pipe(res);
 			} else {
 				console.warn(path + ' not found');
@@ -114,16 +111,12 @@ const responder = {
 
 	// send cached file
 	sendFromCache(req, res) {
-		let url = req.url.replace(/^\//, '');
-	
-		if (url === '') {
-			const parts = req.headers['host'].split('.');
-			url = (parts[0] == 'admin') ? home.admin : home.public;
-		}
-		let item = this.items[url];
+		const path = this.normalizeUrl(req);
+		let item = this.items[path];
+
 		if (item === undefined) { item = this.items[home.public]; }
 
-		let headers = {
+		const headers = {
 			'Cache-Control': 'max-age=86400, public',
 			'ETag': item.eTag,
 			'Content-Type': item.mimeType + ';charset=utf-8'
@@ -135,6 +128,16 @@ const responder = {
 		res.write(item.buffer);
 		res.end();
 	},
+
+   normalizeUrl(req) {
+      let url = req.url.replace(/^\//, '');
+
+      if (url === '') {
+         const [subdomain,] = req.headers['host'].split('.');
+         url = (subdomain == 'admin') ? home.admin : home.public;
+      }
+      return url;
+   },
 
 	next() {	if (--this.pending == 0 && this.loaded !== null) { this.loaded();	}	}
 };
@@ -155,6 +158,6 @@ responder.prepare(() => {
 	//tasks.start();
 
 	http.createServer(responder.send.bind(responder)).listen(port, ()=> {
-		log.info("Starting Legislative Review on port " + port);
+		log.info("Starting Legislative Review in " + (testMode ? "test" : "live") + " mode on port " + port);
 	});
 });
