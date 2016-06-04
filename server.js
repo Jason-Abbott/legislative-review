@@ -121,9 +121,9 @@ const responder = {
 			'ETag': item.eTag,
 			'Content-Type': item.mimeType + ';charset=utf-8'
 		};
-			
+
 		if (item.compressed) { headers['Content-Encoding'] = 'gzip'; }
-		
+
 		res.writeHead(200, headers);
 		res.write(item.buffer);
 		res.end();
@@ -148,10 +148,11 @@ responder.prepare(() => {
 	const config = require('./lib/config');
 	const log = require('./lib/utils/logs');
 	const db = require('./lib/utils/db');
+	const NL = require('os').EOL;
 
 	config.db.serviceAccount.clientEmail = process.env['FIREBASE_EMAIL'];
-	config.db.serviceAccount.privateKey = '-----BEGIN PRIVATE KEY-----\n' +
-		process.env['FIREBASE_KEY'].replace(/\\n/g, '\n') + '\n-----END PRIVATE KEY-----\n';
+	config.db.serviceAccount.privateKey = '-----BEGIN PRIVATE KEY-----' + NL +
+		process.env['FIREBASE_KEY'].replace(/\\?\\n/g, NL) + NL + '-----END PRIVATE KEY-----' + NL;
 
 	db.connect();
 	const tasks = require('./lib/tasks');
