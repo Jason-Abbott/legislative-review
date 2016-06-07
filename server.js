@@ -135,6 +135,8 @@ const responder = {
       if (url === '') {
          const [subdomain,] = req.headers['host'].split('.');
          url = (subdomain == 'admin') ? home.admin : home.public;
+      } else if (url.includes('?')) {
+	      url = url.substr(0, url.indexOf('?'));
       }
       return url;
    },

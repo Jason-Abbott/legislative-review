@@ -1,21 +1,21 @@
 // http://zerosixthree.se/8-sass-mixins-you-must-have-in-your-toolbox/
 
 @mixin keyframes($animation-name) {
-   @-webkit-keyframes #{$animation-name} {
-      @content;
-   }
-   @-moz-keyframes #{$animation-name} {
-	      @content;
-   }
-   @-ms-keyframes #{$animation-name} {
-      @content;
-   }
-   @-o-keyframes #{$animation-name} {
-      @content;
-   }
-   @keyframes #{$animation-name} {
-      @content;
-   }
+	@-webkit-keyframes #{$animation-name} {
+		@content;
+	}
+	@-moz-keyframes #{$animation-name} {
+		@content;
+	}
+	@-ms-keyframes #{$animation-name} {
+		@content;
+	}
+	@-o-keyframes #{$animation-name} {
+		@content;
+	}
+	@keyframes #{$animation-name} {
+		@content;
+	}
 }
 
 @mixin background-clip($argument: padding-box) {
@@ -24,18 +24,18 @@
 	background-clip: $argument;
 }
 
-@mixin box-shadow($top, $left, $blur, $color, $inset:"") {
-	-webkit-box-shadow:$top $left $blur $color #{$inset};
-	-moz-box-shadow:$top $left $blur $color #{$inset};
-	box-shadow:$top $left $blur $color #{$inset};
+@mixin box-shadow($blur: 5px, $alpha: 0.5, $top: 0, $left: 0, $inset:"") {
+	-webkit-box-shadow:$top $left $blur rgba(#000, $alpha) #{$inset};
+	-moz-box-shadow:$top $left $blur rgba(#000, $alpha) #{$inset};
+	box-shadow:$top $left $blur rgba(#000, $alpha) #{$inset};
 }
 
 @mixin animation($str) {
-   -webkit-animation: #{$str};
-   -moz-animation: #{$str};
-   -ms-animation: #{$str};
-   -o-animation: #{$str};
-   animation: #{$str};
+	-webkit-animation: #{$str};
+	-moz-animation: #{$str};
+	-ms-animation: #{$str};
+	-o-animation: #{$str};
+	animation: #{$str};
 }
 
 @mixin transition($args...) {
@@ -46,11 +46,11 @@
 	transition: $args;
 }
 
-@mixin box-shadow($args...) {
-	-webkit-box-shadow: $args;
-	-moz-box-shadow: $args;
-	box-shadow: $args;
-}
+//@mixin box-shadow($args...) {
+//	-webkit-box-shadow: $args;
+//	-moz-box-shadow: $args;
+//	box-shadow: $args;
+//}
 
 @mixin opacity($opacity) {
 	opacity: $opacity;
@@ -65,11 +65,11 @@
 }
 
 // Box shadows
-@mixin box-shadow($shadow...) {
-  -webkit-box-shadow: $shadow;
-     -moz-box-shadow: $shadow;
-          box-shadow: $shadow;
-}
+//@mixin box-shadow($shadow...) {
+//	-webkit-box-shadow: $shadow;
+//	-moz-box-shadow: $shadow;
+//	box-shadow: $shadow;
+//}
 
 @mixin rounded($radius: 2px) {
 	-webkit-border-radius: $radius;
