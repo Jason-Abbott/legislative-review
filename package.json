@@ -28,7 +28,7 @@
     "cheerio": "^0.20.0",
     "firebase": "^3.0.0",
     "pdf2json": "^1.1.5",
-    "superagent": "^2.0.0-alpha.3"
+    "superagent": "^4.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
